@@ -241,6 +241,10 @@ void AtomMainDelegate::PreSandboxStartup() {
   // linux (namespace sandbox is available on most distros).
   command_line->AppendSwitch(service_manager::switches::kDisableSetuidSandbox);
 
+#if defined(MAS_BUILD)
+  command_line->AppendSwitch(service_manager::switches::kNoSandbox);
+#endif
+
   // Allow file:// URIs to read other file:// URIs by default.
   command_line->AppendSwitch(::switches::kAllowFileAccessFromFiles);
 

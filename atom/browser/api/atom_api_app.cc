@@ -1224,6 +1224,7 @@ v8::Local<v8::Promise> App::GetGPUInfo(v8::Isolate* isolate,
   return promise->GetHandle();
 }
 
+#if !defined(MAS_BUILD)
 static void RemoveNoSandboxSwitch(base::CommandLine* command_line) {
   if (command_line->HasSwitch(service_manager::switches::kNoSandbox)) {
     const base::CommandLine::CharType* noSandboxArg =
@@ -1237,6 +1238,7 @@ static void RemoveNoSandboxSwitch(base::CommandLine* command_line) {
     command_line->InitFromArgv(modified_command_line);
   }
 }
+#endif
 
 void App::EnableSandbox(mate::Arguments* args) {
   if (Browser::Get()->is_ready()) {
@@ -1246,9 +1248,11 @@ void App::EnableSandbox(mate::Arguments* args) {
     return;
   }
 
+#if !defined(MAS_BUILD)
   auto* command_line = base::CommandLine::ForCurrentProcess();
   RemoveNoSandboxSwitch(command_line);
   command_line->AppendSwitch(switches::kEnableSandbox);
+#endif
 }
 
 #if defined(OS_MACOSX)
